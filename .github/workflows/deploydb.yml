@@ -1,0 +1,14 @@
+name: deploydb
+on:
+  workflow_dispatch:
+
+jobs:
+  load-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cargar datos en MongoDB Atlas
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: |
+          docker run --rm -v "$PWD/data:/data" mongo:7 mongosh "$MONGO_URI" --quiet /data/seed.js
